@@ -1,0 +1,14 @@
+// Copyright 2025 JC-Lab
+// SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-FEL
+
+syntax = "proto3";
+package flymesh.throughput;
+
+option go_package = "github.com/flymesh/core/internal/pb/throughput;throughputpb";
+
+message Start {
+  uint32 duration_sec = 1;
+  uint32 buffer_size = 2;
+}
+
+message Ack {}

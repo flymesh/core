@@ -1,0 +1,29 @@
+// Copyright 2025 JC-Lab
+// SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-FEL
+
+syntax = "proto3";
+package flymesh.control;
+
+option go_package = "github.com/flymesh/core/internal/pb/control;controlpb";
+
+message StartRelayStreamRequest {}
+
+message StartRelayStreamResponse {
+  bool ok = 1;
+  string error = 2;
+  string relay_endpoint = 3;
+  uint64 stream_id = 4;
+  bytes token = 5; // 32 bytes (256-bit)
+}
+
+message CreateStreamRequest {
+  bytes client_peer_id = 1;
+}
+
+message CreateStreamResponse {
+  bool ok = 1;
+  string error = 2;
+  string relay_endpoint = 3;
+  uint64 stream_id = 4;
+  bytes token = 5; // 32 bytes (256-bit)
+}
