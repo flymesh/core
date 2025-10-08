@@ -4,7 +4,7 @@
 syntax = "proto3";
 package flymesh.throughput;
 
-option go_package = "github.com/flymesh/core/internal/pb/throughput;throughputpb";
+option go_package = "github.com/flymesh/core/pkg/pb/throughput;throughputpb";
 
 message Start {
   uint32 duration_sec = 1;

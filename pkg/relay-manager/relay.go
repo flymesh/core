@@ -15,8 +15,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/flymesh/core/internal/pb/relay"
-	relay_protocol "github.com/flymesh/core/internal/relay-protocol"
+	"github.com/flymesh/core/pkg/pb/relay"
+	relay_protocol "github.com/flymesh/core/pkg/relay-protocol"
 	"github.com/libp2p/go-libp2p/core/peer"
 
 	"google.golang.org/protobuf/proto"

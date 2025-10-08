@@ -8,11 +8,11 @@ import (
 	"log"
 	"time"
 
-	"github.com/flymesh/core/internal/pb/control"
-	"github.com/flymesh/core/internal/protocol"
-	relay_manager "github.com/flymesh/core/internal/relay-manager"
-	relay_protocol "github.com/flymesh/core/internal/relay-protocol"
 	"github.com/flymesh/core/p2p"
+	"github.com/flymesh/core/pkg/pb/control"
+	"github.com/flymesh/core/pkg/protocol"
+	relay_manager "github.com/flymesh/core/pkg/relay-manager"
+	relay_protocol "github.com/flymesh/core/pkg/relay-protocol"
 	"github.com/libp2p/go-libp2p/core/peer"
 
 	"github.com/libp2p/go-libp2p/core/network"

@@ -9,8 +9,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/flymesh/core/internal/util"
 	"github.com/flymesh/core/p2p"
+	"github.com/flymesh/core/pkg/util"
 	relay_client "github.com/flymesh/core/relay-client"
 
 	peer "github.com/libp2p/go-libp2p/core/peer"

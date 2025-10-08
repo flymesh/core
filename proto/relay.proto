@@ -4,7 +4,7 @@
 syntax = "proto3";
 package flymesh.relay;
 
-option go_package = "github.com/flymesh/core/internal/pb/relay-server;relaypb";
+option go_package = "github.com/flymesh/core/pkg/pb/relay-server;relaypb";
 
 message HandshakeRequest {
   uint64 stream_id = 1;

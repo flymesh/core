@@ -9,9 +9,9 @@ import (
 	"log"
 	"time"
 
-	controlpb "github.com/flymesh/core/internal/pb/control"
-	"github.com/flymesh/core/internal/protocol"
-	relay_protocol "github.com/flymesh/core/internal/relay-protocol"
+	controlpb "github.com/flymesh/core/pkg/pb/control"
+	"github.com/flymesh/core/pkg/protocol"
+	relay_protocol "github.com/flymesh/core/pkg/relay-protocol"
 	"github.com/libp2p/go-libp2p/core/crypto"
 	"github.com/libp2p/go-libp2p/core/host"
 	"github.com/libp2p/go-libp2p/core/network"

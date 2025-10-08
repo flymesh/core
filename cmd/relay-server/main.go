@@ -8,9 +8,9 @@ import (
 	"flag"
 	"log"
 
-	"github.com/flymesh/core/internal/relay-server"
-	"github.com/flymesh/core/internal/util"
 	"github.com/flymesh/core/p2p"
+	"github.com/flymesh/core/pkg/relay-server"
+	"github.com/flymesh/core/pkg/util"
 	"github.com/libp2p/go-libp2p"
 )
 
