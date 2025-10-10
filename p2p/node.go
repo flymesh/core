@@ -57,14 +57,6 @@ func (n *Node) Init() error {
 		}
 	}
 
-	bootstrapPeers := n.BootstrapPeers
-	if len(bootstrapPeers) == 0 {
-		bootstrapPeers, err = DefaultBootstrapPeers()
-		if err != nil {
-			return err
-		}
-	}
-
 	peerChan := make(chan peer.AddrInfo)
 	n.peerChan = peerChan
 
@@ -136,7 +128,7 @@ func (n *Node) Init() error {
 			n.ctx,
 			basicHost,
 			dht.Mode(dht.ModeClient),
-			dht.BootstrapPeers(bootstrapPeers...),
+			dht.BootstrapPeers(n.BootstrapPeers...),
 		)
 		if err != nil {
 			return err
