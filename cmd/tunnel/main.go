@@ -7,6 +7,7 @@ import (
 	"context"
 	"flag"
 	"log"
+	"net"
 	"time"
 
 	"github.com/flymesh/core/p2p"
@@ -111,6 +112,10 @@ func runServerMode(ctx context.Context, node *p2p.Node, relayPeerID string, rela
 	serverRole := &relay_client.ServerRole{
 		PrivKey:     node.PrivKey,
 		RelayPeerId: rpid,
+		Handler: func(streamInfo *relay_client.StreamInfo, conn net.Conn) {
+			defer conn.Close()
+			util.ReceiveAndMeasureTCP(conn, 10)
+		},
 	}
 
 	serverRole.RegisterProtocol(node.Host)

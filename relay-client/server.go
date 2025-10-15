@@ -7,12 +7,12 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net"
 	"time"
 
 	controlpb "github.com/flymesh/core/pkg/pb/control"
 	"github.com/flymesh/core/pkg/protocol"
 	relay_protocol "github.com/flymesh/core/pkg/relay-protocol"
-	"github.com/flymesh/core/pkg/util"
 	"github.com/libp2p/go-libp2p/core/crypto"
 	"github.com/libp2p/go-libp2p/core/host"
 	"github.com/libp2p/go-libp2p/core/network"
@@ -22,6 +22,7 @@ import (
 type ServerRole struct {
 	PrivKey     crypto.PrivKey
 	RelayPeerId peer.ID
+	Handler     func(streamInfo *StreamInfo, conn net.Conn)
 }
 
 func (r *ServerRole) CreateStream(ctx context.Context, h host.Host, relayPeerId peer.ID, clientPeerId peer.ID) (*StreamInfo, error) {
@@ -105,9 +106,8 @@ func (r *ServerRole) HandleStartRelay(h host.Host, s network.Stream) {
 			log.Printf("[server] Stream[%d] dial relay failed: %+v", streamInfo.StreamID, err)
 			return
 		}
-		defer conn.Close()
-
-		util.ReceiveAndMeasureTCP(conn, 10)
+		
+		r.Handler(streamInfo, conn)
 	}()
 
 	// Return StartRelayStreamResponse to the client
