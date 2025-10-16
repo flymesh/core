@@ -46,7 +46,7 @@ func main() {
 		log.Printf("Listen on: %s/p2p/%s", a, node.Host.ID())
 	}
 
-	relay_server.Run(ctx, node, *relayListen)
+	relay_server.Run(ctx, node, *relayListen, *relayListen)
 
 	select {}
 }

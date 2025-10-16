@@ -57,7 +57,7 @@ func (a *allocation) Close() error {
 }
 
 type RelayManager struct {
-	listenAddr string
+	PublicAddress string
 
 	mu          sync.Mutex
 	allocations map[uint64]*allocation
@@ -67,21 +67,19 @@ type RelayManager struct {
 	cancel      context.CancelFunc
 }
 
-// New constructs a manager listening on listenAddr (e.g. ":24002")
-func New(listenAddr string) *RelayManager {
+func New() *RelayManager {
 	return &RelayManager{
-		listenAddr:  listenAddr,
 		allocations: make(map[uint64]*allocation),
 	}
 }
 
 // Start begins accepting TCP connections and handling handshakes.
-func (m *RelayManager) Start(ctx context.Context) error {
+func (m *RelayManager) Start(ctx context.Context, listenAddress string) error {
 	if m.cancel != nil {
 		return errors.New("already started")
 	}
 	m.ctx, m.cancel = context.WithCancel(ctx)
-	ln, err := net.Listen("tcp", m.listenAddr)
+	ln, err := net.Listen("tcp", listenAddress)
 	if err != nil {
 		return err
 	}
@@ -149,7 +147,7 @@ func (m *RelayManager) CreateStream(serverPeerID peer.ID, clientPeerID peer.ID, 
 	defer m.mu.Unlock()
 	m.allocations[streamID] = a
 
-	return streamID, token, m.listenAddr, nil
+	return streamID, token, m.PublicAddress, nil
 }
 
 // acceptLoop handles incoming TCP connections and handshake frames.

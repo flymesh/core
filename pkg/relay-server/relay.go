@@ -19,13 +19,14 @@ import (
 )
 
 // Run starts the relay-server mode handlers on the given node.
-func Run(ctx context.Context, node *p2p.Node, listen string) {
+func Run(ctx context.Context, node *p2p.Node, listenAddress string, publicAddress string) {
 	// Start TCP RelayManager
-	rm := relay_manager.New(listen)
-	if err := rm.Start(ctx); err != nil {
+	rm := relay_manager.New()
+	rm.PublicAddress = publicAddress
+	if err := rm.Start(ctx, listenAddress); err != nil {
 		log.Fatalf("relay-server manager start failed: %+v", err)
 	}
-	log.Printf("RelayManager started on %s", listen)
+	log.Printf("RelayManager started on %s", listenAddress)
 
 	// Handle /flymesh/1.0/relay-server/create-stream
 	node.Host.SetStreamHandler(protocol.ProtoRelayCreate, func(s network.Stream) {
