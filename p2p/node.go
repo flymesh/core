@@ -35,7 +35,8 @@ type Node struct {
 	// If 0, libp2p.DefaultListenAddrs are used.
 	ListenPort int
 
-	Libp2pOptions []libp2p.Option
+	UseCustomRelayConfig bool
+	Libp2pOptions        []libp2p.Option
 
 	ctx      context.Context
 	cancel   context.CancelFunc
@@ -57,9 +58,6 @@ func (n *Node) Init() error {
 		}
 	}
 
-	peerChan := make(chan peer.AddrInfo)
-	n.peerChan = peerChan
-
 	opts := []libp2p.Option{
 		libp2p.Identity(n.PrivKey),
 		libp2p.UserAgent("p2ptest"),
@@ -70,7 +68,16 @@ func (n *Node) Init() error {
 		//libp2p.EnableRelayService(relay.WithLimit(nil), relay.WithACL(acl)),
 		//libp2p.EnableNATService(),
 		libp2p.EnableAutoNATv2(),
-		libp2p.EnableAutoRelayWithPeerSource(
+		libp2p.EnableHolePunching(
+			holepunch.WithTracer(&simpleTracer{}),
+		),
+		libp2p.ForceReachabilityPrivate(),
+		//libp2p.WithDialTimeout(time.Second*10),
+	}
+	if !n.UseCustomRelayConfig {
+		peerChan := make(chan peer.AddrInfo)
+		n.peerChan = peerChan
+		opts = append(opts, libp2p.EnableAutoRelayWithPeerSource(
 			func(ctx context.Context, numPeers int) <-chan peer.AddrInfo {
 				r := make(chan peer.AddrInfo)
 				go func() {
@@ -95,15 +102,10 @@ func (n *Node) Init() error {
 			},
 			autorelay.WithNumRelays(2),
 			autorelay.WithBootDelay(5*time.Second),
-		),
-		libp2p.EnableHolePunching(
-			holepunch.WithTracer(&simpleTracer{}),
-		),
-		libp2p.ForceReachabilityPrivate(),
-		//libp2p.WithDialTimeout(time.Second*10),
-		libp2p.FallbackDefaults,
+		))
 	}
 	opts = append(opts, n.Libp2pOptions...)
+	opts = append(opts, libp2p.FallbackDefaults)
 
 	// Listen addrs: if ListenPort specified, use the same port for TCP and QUIC (UDP)
 	if n.ListenPort > 0 {
@@ -140,8 +142,10 @@ func (n *Node) Init() error {
 
 	n.PingService = ping.NewPingService(n.Host)
 
-	// Continuously feed peers into the AutoRelay service
-	go n.autoRelayFeeder(peerChan)
+	if !n.UseCustomRelayConfig {
+		// Continuously feed peers into the AutoRelay service
+		go n.autoRelayFeeder(n.peerChan)
+	}
 
 	return nil
 }
